@@ -1,7 +1,3 @@
-Aqui está uma versão do README adaptada especificamente para o estado do projeto até o commit mencionado, focando na implementação base da navegação e na estrutura essencial.
-
------
-
 # Navegação Base com Jetpack Compose
 
 > **Status do Projeto:** Implementação inicial da estrutura de navegação.
