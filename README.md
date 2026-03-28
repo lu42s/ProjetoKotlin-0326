@@ -1,76 +1,49 @@
-# Navegação Base com Jetpack Compose
+Navegação e Parâmetros com Jetpack Compose
+Este projeto demonstra como transitar entre telas em um aplicativo Android e, principalmente, como carregar dados de uma tela para outra utilizando diferentes tipos de argumentos.
 
-> **Status do Projeto:** Implementação inicial da estrutura de navegação.
+🎯 O que este projeto resolve?
+Em um app real, raramente apenas "abrimos" uma tela. Geralmente, abrimos a tela de um produto específico ou a tela de um usuário logado. Este projeto explora as duas formas de fazer isso com o Navigation Compose.
 
-[](https://www.google.com/search?q=LICENSE)
-[](https://www.google.com/search?q=)
-[](https://www.google.com/search?q=)
+🧭 Tipos de Parâmetros na Navegação
+Implementamos duas estratégias de passagem de dados no NavHost:
 
-Este repositório apresenta a fundação de um sistema de navegação para Android, demonstrando como conectar múltiplas telas de forma declarativa e eficiente. Este estágio foca na configuração do `NavController` e na correta aplicação do `innerPadding` do `Scaffold`.
+1. Parâmetros Obrigatórios (Path Arguments)
+Utilizados na tela de Perfil. O app entende que não faz sentido exibir um perfil se não soubermos de quem ele é.
 
-## ✨ Funcionalidades Implementadas
+Como funciona: O dado faz parte da própria URL da rota.
 
-- **Navegação Declarativa:** Uso do `NavHost` para definir o grafo do aplicativo.
-- **Login e Menu:** Fluxo inicial estabelecido entre a tela de autenticação e a tela principal.
-- **Integração com Scaffold:** Garantia de que o conteúdo das telas respeite as barras do sistema (status bar e navigation bar) através do `innerPadding`.
-- **Passagem de Controller:** Injeção do `navController` em cada Composable para permitir ações de navegação internas.
+Rota definida: perfil/{nome}
 
-## 🚀 Tecnologias Utilizadas
+Chamada: navController.navigate("perfil/Lucas")
 
-- **Kotlin**
-- **Jetpack Compose** (UI)
-- **Navigation Compose** (Gerenciamento de rotas)
-- **Material Design 3**
+Obrigatório: Se você tentar navegar para perfil/ sem o nome, o app gerará um erro, pois a rota não será encontrada.
 
-## 🧭 Lógica de Navegação
+2. Parâmetros Opcionais (Query Strings)
+Utilizados na tela de Pedidos. Imagine uma lista de pedidos que pode ou não estar filtrada por um cliente.
 
-Nesta fase, a `MainActivity` atua como o orquestrador central:
+Como funciona: Usamos a sintaxe de interrogação ?, igual em endereços de sites (URLs).
 
-1.  **Criação do Controller:** Utilizamos `rememberNavController()` para manter o estado da navegação durante recomposições.
-2.  **Definição de Rotas:** O `NavHost` mapeia strings (IDs de rota) para funções Composable específicas.
-3.  **Respeito ao Layout:** Cada tela recebe o `modifier` vindo do `Scaffold` da `MainActivity`, prevenindo que elementos da interface fiquem escondidos sob barras de navegação.
+Rota definida: pedidos?cliente={cliente}
 
-<!-- end list -->
+Chamada com dado: navController.navigate("pedidos?cliente=Android Store")
 
-```kotlin
-// Exemplo da estrutura na MainActivity
-Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-    NavHost(navController = navController, startDestination = "login") {
-        composable("login") { 
-            LoginScreen(navController, Modifier.padding(innerPadding)) 
-        }
-        // ... outras rotas
-    }
-}
-```
+Chamada sem dado: navController.navigate("pedidos")
 
-## 📂 Estrutura de Pastas (Base)
+Opcional: Se o nome do cliente não for enviado, o sistema de navegação ainda abre a tela, e nós tratamos o valor como "vazio" ou "padrão" no código.
 
-```text
-app/src/main/java/.../navigation_between_screens/
- ├── MainActivity.kt        # NavHost e Scaffold principal
- └── screens/               # Telas desacopladas
-     ├── LoginScreen.kt     # Tela de entrada
-     └── MenuScreen.kt      # Hub de navegação
-```
+🛠 Componentes Técnicos
+navController: O objeto que recebe a ordem de navegar e transporta os dados.
 
-## 📋 Observações Técnicas
+backStackEntry: O "recipiente" onde os dados chegam na tela de destino. É através dele que recuperamos as Strings enviadas.
 
-- **Injeção de Padding:** É fundamental aplicar o `padding(innerPadding)` no componente raiz de cada tela para evitar sobreposição visual, um padrão essencial no Material 3.
-- **Navegação Simples:** A navegação é feita via `navController.navigate("rota")` sem parâmetros complexos nesta etapa.
+innerPadding: Aplicado em todas as telas para garantir que o texto não fique escondido atrás do entalhe (notch) da câmera ou da barra de navegação do celular.
 
-## 🛠️ Como rodar
+📂 Estrutura Simplificada
+MainActivity.kt: Contém o "mapa" de rotas e a lógica de captura dos argumentos.
 
-1.  Clone este repositório.
-2.  Abra no **Android Studio** (versão Ladybug ou superior recomendada).
-3.  Execute o app; o fluxo inicial levará você da tela de Login para o Menu.
+screens/: Contém a interface visual de cada etapa do fluxo (Login, Menu, Perfil e Pedidos).
 
------
+🚀 Como testar no código
+Para entender a diferença na prática, observe estas linhas no arquivo de navegação:
 
-## 👤 Autor e Referência
-
-Este projeto é uma prática baseada nos conceitos de navegação do repositório do Professor [Ewerton Carreira](https://www.google.com/search?q=https://github.com/carreiras/android--navigation-between-screens-app).
-
-**Luísa Souza Santos**
-
------
+Baseado nos estudos de Jetpack Compose e Navigation.
